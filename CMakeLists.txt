@@ -3,9 +3,9 @@ cmake_minimum_required(VERSION 3.23)
 
 # project info
 project(
-  Mylib
+  DefaultName
   VERSION 0.1
-  DESCRIPTION "Default cmake project, Mylib."
+  DESCRIPTION "Default cmake project description."
   LANGUAGES CXX)
 
 # C++ compiler setting
@@ -36,10 +36,6 @@ if(NOT PROJECT_IS_TOP_LEVEL)
   return()
 endif()
 
-add_subdirectory(tests)		# test framework, GoogleTest
-add_subdirectory(example)	# example, show usage of the library
-
-
 # If MSVC is being used, and ASAN is enabled, we need to set the debugger environment
 # so that it behaves well with MSVC's debugger, and we can run the target from visual studio
 if(MSVC)
@@ -50,3 +46,8 @@ endif()
 
 # set the startup project for the "play" button in MSVC
 set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT intro)
+
+# 현재 프로젝트가 binary project라면, 이하를 삭제.
+add_subdirectory(tests)		# test framework, GoogleTest
+add_subdirectory(example)	# example, show usage of the library
+
