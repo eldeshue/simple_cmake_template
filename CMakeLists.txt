@@ -1,0 +1,40 @@
+# Root CMake for the project
+cmake_minimum_required(VERSION 3.23)
+
+# project info
+project(
+  Mylib
+  VERSION 0.1
+  DESCRIPTION "Default cmake project, Mylib."
+  LANGUAGES CXX)
+
+# C++ compiler setting
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+# 라이브러리 파일은 빌드 디렉토리 안에 lib 폴더에 출력.
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+
+# 실행 파일은 빌드 디렉토리 안에 bin 폴더에 출력.
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
+# 외부에 노출하거나 프로젝트가 포함할 라이브러리의 헤더 경로
+include_directories(${PROJECT_SOURCE_DIR}/include)
+
+# activate ctest
+enable_testing()
+
+# sub dir path setting
+# sub dir must have it's own cmake
+add_subdirectory(src)		# actual implementation
+add_subdirectory(lib)		# actual implementation
+
+# Don't even look at tests if we're not top level
+if(NOT PROJECT_IS_TOP_LEVEL)
+  return()
+endif()
+
+add_subdirectory(tests)		# test framework, GoogleTest
+add_subdirectory(example)	# example, show usage of the library
