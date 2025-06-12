@@ -5,9 +5,26 @@ file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
   ${CMAKE_CURRENT_SOURCE_DIR}/*.cc
 )
 
-# add_executable(타겟_실행파일_이름 ${SRC_FILES})
-# target_link_libraries(타겟_실행파일_이름 PUBLIC 링크할라이브러리이름)
+# 프로젝트가 실행 바이너리
+# add_executable(타겟실행파일이름 ${SRC_FILES})
 
-# add_library(타겟_라이브러리_이름 STATIC ${SRC_FILES})
-# target_link_libraries(타겟_라이브러리_이름 PUBLIC 링크할라이브러리이름)
+# 프로젝트가 정적 라이브러리
+# add_library(타겟라이브러리이름 STATIC ${SRC_FILES})
+# target_include_directories(타겟라이브러리이름
+#     PUBLIC
+#         ${PROJECT_SOURCE_DIR}/include      # 공개 헤더 (API)
+#     PRIVATE
+#         ${CMAKE_CURRENT_SOURCE_DIR}/lib    # 내부 전용 헤더
+# )
 add_library(Mylib STATIC ${SRC_FILES})
+
+target_include_directories(Mylib
+    PUBLIC
+        ${PROJECT_SOURCE_DIR}/include      # 공개 헤더 (API)
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/lib    # 내부 전용 헤더
+)
+
+# 현재 타겟에 대한 정적 링킹 추가
+# lib 아래에 추가한 라이브러리를 여기에 추가
+# target_link_libraries(타겟이름 PUBLIC 링크할라이브러리이름)
