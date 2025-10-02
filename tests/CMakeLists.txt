@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.23)
+﻿cmake_minimum_required(VERSION 3.23)
 
 # GoogleTest requires at least C++17
 set(CMAKE_CXX_STANDARD 20)
@@ -20,9 +20,11 @@ file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
   ${CMAKE_CURRENT_SOURCE_DIR}/*.cc
 )
 
+# 테스트 바이너리 빌드에 필요한 라이브러리 링크 필요
+# target_link_libraries(UnitTest PRIVATE 타겟1 타겟2 ... gtest gmock gtest_main)
 enable_testing()
 add_executable(UnitTest ${SRC_FILES})
-target_link_libraries(UnitTest PRIVATE Mylib gtest gmock gtest_main)
+target_link_libraries(UnitTest PRIVATE MyProject gtest gmock gtest_main)
 
 include(GoogleTest)
 gtest_discover_tests(UnitTest)

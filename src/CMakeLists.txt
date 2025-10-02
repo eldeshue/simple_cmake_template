@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.23)
+﻿cmake_minimum_required(VERSION 3.23)
 
 # 현재 디렉토리에 있는 모든 파일을 SRC_FILES 변수에 추가한다.
 file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
@@ -16,9 +16,9 @@ file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
 #     PRIVATE
 #         ${CMAKE_CURRENT_SOURCE_DIR}/lib    # 내부 전용 헤더
 # )
-add_library(Mylib STATIC ${SRC_FILES})
+add_library(MyProject STATIC ${SRC_FILES})
 
-target_include_directories(Mylib
+target_include_directories(MyProject
     PUBLIC
         ${PROJECT_SOURCE_DIR}/include      # 공개 헤더 (API)
     PRIVATE
