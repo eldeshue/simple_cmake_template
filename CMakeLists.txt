@@ -1,4 +1,4 @@
-# Root CMake for the project
+﻿# Root CMake for the project
 cmake_minimum_required(VERSION 3.23)
 
 # project info
@@ -36,18 +36,18 @@ if(NOT PROJECT_IS_TOP_LEVEL)
   return()
 endif()
 
-# If MSVC is being used, and ASAN is enabled, we need to set the debugger environment
-# so that it behaves well with MSVC's debugger, and we can run the target from visual studio
-if(MSVC)
-  get_all_installable_targets(all_targets)
-  message("all_targets=${all_targets}")
-  set_target_properties(${all_targets} PROPERTIES VS_DEBUGGER_ENVIRONMENT "PATH=$(VC_ExecutablePath_x64);%PATH%")
-endif()
-
 # set the startup project for the "play" button in MSVC
 set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT intro)
 
 # 현재 프로젝트가 binary project라면, 이하를 삭제.
 add_subdirectory(tests)		# test framework, GoogleTest
 add_subdirectory(example)	# example, show usage of the library
+
+# If MSVC is being used, and ASAN is enabled, we need to set the debugger environment
+# so that it behaves well with MSVC's debugger, and we can run the target from visual studio
+if(MSVC)
+  set(all_targets example UnitTest)
+  set_target_properties(example UnitTest PROPERTIES VS_DEBUGGER_ENVIRONMENT "PATH=$(VC_ExecutablePath_x64);%PATH%")
+endif()
+
 
