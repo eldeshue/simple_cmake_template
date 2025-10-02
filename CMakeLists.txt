@@ -46,7 +46,8 @@ add_subdirectory(example)	# example, show usage of the library
 # If MSVC is being used, and ASAN is enabled, we need to set the debugger environment
 # so that it behaves well with MSVC's debugger, and we can run the target from visual studio
 if(MSVC)
-  set(all_targets example UnitTest)
+  # add executable as a targets
+  # set_target_properties(실행1 실행2 ... 실행n PROPERTIES VS_DEBUGGER_ENVIRONMENT "PATH=$(VC_ExecutablePath_x64);%PATH%")
   set_target_properties(example UnitTest PROPERTIES VS_DEBUGGER_ENVIRONMENT "PATH=$(VC_ExecutablePath_x64);%PATH%")
 endif()
 
