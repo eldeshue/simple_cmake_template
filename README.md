@@ -1,4 +1,4 @@
-# Simple cmake template
+﻿# Simple cmake template
 ## Description
 cmake를 사용한 간다한 c++프로젝트를 위한 템플릿.
 
@@ -49,10 +49,10 @@ root의 CMakeLists.txt에 project 이름 및 프로젝트 옵션을 설정한다
 cmake --preset <preset-name>
 ```
 예시:
-- Windows + MSVC Debug (Developer Mode):
+- Windows + MSVC (Debug Mode):
 
 ```bash
-cmake --preset windows-msvc-debug-developer-mode
+cmake --preset windows-msvc-debug-mode
 ```
 - Unix-like + Clang Release:
 
@@ -67,7 +67,7 @@ cmake --build --preset <preset-name>
 예시:
 
 ``` bash
-cmake --build --preset windows-msvc-debug-developer-mode
+cmake --build --preset windows-msvc-debug-mode
 ```
 
 ## 🧪 3. 테스트(Test)
@@ -99,7 +99,7 @@ VSCode에서는 .vscode/launch.json을 구성하여 디버깅 가능합니다.
 
 # ⚙️ 주요 Presets 요약
 Preset 이름	설명
-- `windows-msvc-debug-developer-mode` :	Windows + MSVC + Debug + 개발자 모드
+- `windows-msvc-debug-mode` :	Windows + MSVC + Debug
 - `windows-clang-release` :	Windows + Clang + Release
 - `unixlike-gcc-debug` :	Linux/macOS + GCC + Debug
 - `unixlike-clang-release` :	Linux/macOS + Clang + Release
@@ -119,3 +119,5 @@ CMake ≥ 3.23이 필요합니다.
 VSCode를 사용하는 경우 자동으로 preset을 인식하며, "CMake: Configure"를 실행하면 선택 가능.
 
 테스트 실행 전 반드시 빌드가 완료되어야 합니다.
+
+linter로 clang-tidy, formatter로 clang-format이 통합되어 있습니다. 빌드 시에 동작합니다.
