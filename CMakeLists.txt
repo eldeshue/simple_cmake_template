@@ -8,6 +8,9 @@ project(
   DESCRIPTION "Default cmake project description."
   LANGUAGES CXX)
 
+# 컴파일 관련 설정 외부로 노출(CMake에 연동된 다른 기능이 참조함)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # C++ compiler setting
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -52,3 +55,86 @@ if(MSVC)
 endif()
 
 
+# ===================================================================
+# Deactivate Clang-Tidy for Google Test
+# ===================================================================
+# gtest, gmock, gtest_main 타겟이 생성된 후에 속성을 덮어쓴다.
+set_target_properties(gtest gmock gtest_main PROPERTIES
+  CXX_CLANG_TIDY "" # 빈 문자열로 설정하여 Clang-Tidy를 끔
+)
+
+# ===================================================================
+# ClangFormat integration
+# ===================================================================
+
+# 1. find clang-format executable
+find_program(CLANG_FORMAT_EXECUTABLE clang-format)
+
+# 2. check existence of clang-format
+if(CLANG_FORMAT_EXECUTABLE)
+    # 3. make list of target files to apply format
+    #    (recursively searching .h, .cpp files)
+    file(GLOB_RECURSE FORMATTING_SOURCES
+        "${PROJECT_SOURCE_DIR}/src/*.cc"
+        "${PROJECT_SOURCE_DIR}/src/*.cpp"
+        "${PROJECT_SOURCE_DIR}/include/*.h"
+        "${PROJECT_SOURCE_DIR}/include/*.hpp"
+        # ... 프로젝트에 포함된 모든 소스 파일 경로 패턴 추가 ...
+    )
+
+    message(STATUS "Found files for formatting:")
+	foreach(source_file IN LISTS FORMATTING_SOURCES)
+		message(STATUS "  - ${source_file}")
+	endforeach()
+
+    # 4. add custom target named 'format'
+    add_custom_target(format
+        COMMAND ${CLANG_FORMAT_EXECUTABLE}
+                -i # direct modification (in-place)
+                --style=file # style based on .clang-format file
+                ${FORMATTING_SOURCES} # target list
+        
+        COMMENT "Formatting C++ source files with clang-format..."
+        
+        # 다른 소스 파일이 변경되어도 항상 실행되도록 설정
+        VERBATIM
+    )
+    
+    # in case failed to find clang-format
+else()
+    message(WARNING "clang-format not found. The 'format' target will not be available.")
+endif()
+
+# ===================================================================
+# ClangTidy integration (Custom Target)
+# ===================================================================
+
+# 1. find clang-tidy executable
+find_program(CLANG_TIDY_EXECUTABLE clang-tidy)
+
+# 2. check existence of clang-tidy
+if(CLANG_TIDY_EXECUTABLE)
+    # 3. make list of target files to apply tidy check
+    #    (recursively searching source files)
+    file(GLOB_RECURSE TIDY_SOURCES
+        "${PROJECT_SOURCE_DIR}/src/*.cc"
+        "${PROJECT_SOURCE_DIR}/src/*.cpp"
+        "${PROJECT_SOURCE_DIR}/include/*.h"
+        "${PROJECT_SOURCE_DIR}/include/*.hpp"
+        # ... 프로젝트에 포함된 모든 소스 파일 경로 패턴 추가 ...
+    )
+
+    # 4. add custom target named 'clang-tidy'
+    add_custom_target(clang-tidy
+        COMMAND ${CLANG_TIDY_EXECUTABLE}
+                -p ${CMAKE_BINARY_DIR}
+                ${TIDY_SOURCES}
+        
+        COMMENT "Running clang-tidy on all sources..."
+        VERBATIM
+    )
+
+# in case failed to find clang-tidy
+else()
+    message(WARNING "clang-tidy not found. The 'clang-tidy' target will not be available.")
+endif()
