@@ -17,12 +17,20 @@ file(GLOB_RECURSE SRC_FILES CONFIGURE_DEPENDS
 #         ${CMAKE_CURRENT_SOURCE_DIR}/lib    # 내부 전용 헤더
 # )
 add_library(MyProject STATIC ${SRC_FILES})
-
 target_include_directories(MyProject
     PUBLIC
         ${PROJECT_SOURCE_DIR}/include      # 공개 헤더 (API)
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}/lib    # 내부 전용 헤더
+)
+
+# 현재 타겟에 대한 정적 링킹 추가
+# lib 아래에 추가한 라이브러리를 여기에 추가
+# find_package(패키지 이름 CONFIG REQUIRED)
+# target_link_libraries(타겟이름 PUBLIC 링크할라이브러리이름)
+find_package(fmt CONFIG REQUIRED)
+target_link_libraries(MyProject PRIVATE
+    fmt::fmt
 )
 
 # MSVC 컴파일러를 사용할 때만 Microsoft Code Analysis를 활성화합니다.
@@ -31,6 +39,3 @@ if(MSVC)
     message(STATUS "Microsoft Code Analysis (/analyze) enabled for MSVC builds.")
 endif()
 
-# 현재 타겟에 대한 정적 링킹 추가
-# lib 아래에 추가한 라이브러리를 여기에 추가
-# target_link_libraries(타겟이름 PUBLIC 링크할라이브러리이름)
