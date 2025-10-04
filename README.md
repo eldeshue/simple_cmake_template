@@ -2,7 +2,7 @@
 ## Description
 cmake를 사용한 간다한 c++프로젝트를 위한 템플릿.
 
-일단은 linux, mac, windows의 multi-platform을 목적으로 하지만, MSVC에서는 검증이 필요함.
+일단은 linux, mac, windows의 multi-platform을 목적으로 합니다.
 
 ## Directory Setting
 - `src/` : 프로젝트를 구성하는 실제 구현 파일을 위한 경로.
@@ -43,6 +43,14 @@ root의 CMakeLists.txt에 project 이름 및 프로젝트 옵션을 설정한다
 
 # 🛠️ 프로젝트 빌드 & 실행 가이드 (CMake Presets 기반)
 이 프로젝트는 CMakePresets.json을 활용하여 다양한 플랫폼 및 빌드 설정을 지원합니다.
+패키지의 경우 vcpkg를 통해서 관리합니다.
+
+## 0. 사전 준비(Prerequisite)
+- CMake 3.23 이상
+- C++20을 지원하는 C++ 컴파일러 (예: Visual Studio 2022)
+- Git
+- formatter : clang-format(optional)
+- linter : clang-tidy(optional)
 
 ## 📦 1. 구성(Configure)
 ```bash
@@ -60,15 +68,35 @@ cmake --preset windows-msvc-debug-mode
 cmake --preset unixlike-clang-release
 ```
 ## 🧱 2. 빌드(Build)
-``` bash
-cmake --build --preset <preset-name>
-```
 
-예시:
+1.  **저장소 클론 (Cloning the Repository)**
 
-``` bash
-cmake --build --preset windows-msvc-debug-mode
-```
+    이 프로젝트는 vcpkg를 Git 서브모듈로 사용하므로, 클론 시 `--recurse-submodules` 플래그를 사용해야 합니다.
+
+    ```bash
+    git clone --recurse-submodules [https://github.com/YourUsername/YourProject.git](https://github.com/YourUsername/YourProject.git)
+    ```
+
+    만약 플래그 없이 이미 클론했다면, 아래 명령어를 실행하여 서브모듈을 초기화하고 업데이트하세요.
+    ```bash
+    cd YourProject
+    git submodule update --init --recursive
+    ```
+
+2.  **프로젝트 구성 및 빌드 (Configure & Build)**
+
+    Visual Studio(2022) IDE에서 이 폴더를 열고, `CMakePresets.json`에 정의된 프리셋 중 하나를 선택하여 빌드하세요. 필요한 모든 의존성 라이브러리는 vcpkg가 자동으로 관리합니다.
+
+    단순 CMake를 활용하는 경우, 다음과 같이 preset을 결정하여 configure하세요.
+	``` bash
+	cmake --build --preset <preset-name>
+	```
+
+	예시:
+
+	``` bash
+	cmake --build --preset windows-msvc-debug-mode
+	```
 
 ## 🧪 3. 테스트(Test)
 ``` bash
@@ -114,10 +142,8 @@ Test Presets는 위의 configure preset 이름 앞에 test-를 붙이면 됩니�
 - `out/install/<preset-name>` :	설치 디렉토리 (선택적으로 사용 가능)
 
 # 🚧 주의
-CMake ≥ 3.23이 필요합니다.
-
 VSCode를 사용하는 경우 자동으로 preset을 인식하며, "CMake: Configure"를 실행하면 선택 가능.
 
 테스트 실행 전 반드시 빌드가 완료되어야 합니다.
 
-linter로 clang-tidy, formatter로 clang-format이 통합되어 있습니다. 빌드 시에 동작합니다.
+프로젝트를 구성하는 패키지의 라이선스는 NOTICE.md를 확인하세요.
